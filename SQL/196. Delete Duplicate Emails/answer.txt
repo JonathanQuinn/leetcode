@@ -1,0 +1,9 @@
+DELETE FROM Person
+WHERE id NOT IN (
+  SELECT id
+  FROM (
+    SELECT id, ROW_NUMBER() OVER (PARTITION BY email ORDER BY id) as row_num
+    FROM Person
+  ) tmp
+  WHERE row_num = 1
+);
